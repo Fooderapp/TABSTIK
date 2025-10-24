@@ -15,6 +15,12 @@ namespace TABSTIK.Managers
         public Transform redSpawnArea;
         public Transform blueSpawnArea;
         public Vector3 spawnAreaSize = new Vector3(10f, 0f, 10f);
+        
+        [Header("Multiple Spawn Points (Optional)")]
+        [Tooltip("If provided, units will spawn randomly at one of these points. Overrides redSpawnArea.")]
+        public Transform[] redSpawnPoints;
+        [Tooltip("If provided, units will spawn randomly at one of these points. Overrides blueSpawnArea.")]
+        public Transform[] blueSpawnPoints;
 
         private int redScore = 0;
         private int blueScore = 0;
@@ -144,6 +150,29 @@ namespace TABSTIK.Managers
 
         public Vector3 GetSpawnPosition(Units.Team team)
         {
+            // Check if multiple spawn points are configured
+            Transform[] spawnPoints = team == Units.Team.Red ? redSpawnPoints : blueSpawnPoints;
+            
+            if (spawnPoints != null && spawnPoints.Length > 0)
+            {
+                // Randomly select one spawn point from the array
+                int randomIndex = Random.Range(0, spawnPoints.Length);
+                Transform selectedSpawnPoint = spawnPoints[randomIndex];
+                
+                if (selectedSpawnPoint != null)
+                {
+                    // Random position within spawn area around the selected point
+                    Vector3 randomOffset = new Vector3(
+                        Random.Range(-spawnAreaSize.x / 2, spawnAreaSize.x / 2),
+                        0f,
+                        Random.Range(-spawnAreaSize.z / 2, spawnAreaSize.z / 2)
+                    );
+                    
+                    return selectedSpawnPoint.position + randomOffset;
+                }
+            }
+            
+            // Fallback to single spawn area
             Transform spawnArea = team == Units.Team.Red ? redSpawnArea : blueSpawnArea;
             
             if (spawnArea == null)
@@ -153,13 +182,13 @@ namespace TABSTIK.Managers
             }
 
             // Random position within spawn area
-            Vector3 randomOffset = new Vector3(
+            Vector3 randomOffset2 = new Vector3(
                 Random.Range(-spawnAreaSize.x / 2, spawnAreaSize.x / 2),
                 0f,
                 Random.Range(-spawnAreaSize.z / 2, spawnAreaSize.z / 2)
             );
 
-            return spawnArea.position + randomOffset;
+            return spawnArea.position + randomOffset2;
         }
 
         public void AddScore(Units.Team team, int points)
