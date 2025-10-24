@@ -17,8 +17,11 @@ The game features AI-controlled units that automatically fight in team-based bat
 - **Autonomous AI**: Units automatically find targets, move, and attack
 - **Dynamic Unit Spawning**: Real-time spawning based on TikTok interactions
 - **Team-Based Battles**: Red Team vs Blue Team
+- **Multiple Spawn Points**: Support for multiple spawn locations per team with random selection ⭐ NEW
 - **Round System**: Automatic round end detection and battlefield reset
 - **Scoring**: Persistent score tracking across rounds
+- **Automated Setup**: One-click scene setup utility ⭐ NEW
+- **Sample Prefabs**: Pre-built unit models ready to use ⭐ NEW
 
 ### Unit Types
 1. **Soldier** (Basic Unit)
@@ -93,6 +96,8 @@ TABSTIK/
 
 ### Setup Instructions
 
+#### Automated Setup (Recommended) ⚡
+
 1. **Clone the Repository**
    ```bash
    git clone https://github.com/Fooderapp/TABSTIK.git
@@ -104,7 +109,29 @@ TABSTIK/
    - Click "Add" and select the TABSTIK folder
    - Open the project
 
-3. **Create the Scene**
+3. **Run Automated Setup**
+   - Create a new scene or use the default scene
+   - Create an empty GameObject
+   - Add the `SceneSetupUtility` component
+   - Click the **"Setup Scene"** button in the Inspector
+   - Press Play to test!
+
+**That's it!** The setup utility will automatically create:
+- All manager GameObjects (GameManager, UnitSpawner, TikTokEventListener)
+- Multiple spawn points for each team (configurable)
+- Sample unit prefabs (Soldier, Archer, Tank, Wacky)
+- Team materials (Red and Blue)
+- Environment (ground plane, lighting)
+- UI Canvas with UIManager
+- Test controller for keyboard spawning
+
+See `SETUP_GUIDE.md` for detailed information about the automated setup.
+
+#### Manual Setup (Advanced)
+
+If you prefer to set up the scene manually:
+
+1. **Create the Scene**
    - Create a new scene or use the default scene
    - Add the following GameObjects:
      - **GameManager**: Empty GameObject with `GameManager` script
@@ -115,19 +142,24 @@ TABSTIK/
      - **Directional Light**: For scene lighting
      - **Plane**: Ground plane scaled to (10, 1, 10)
 
-4. **Configure Spawn Areas**
-   - Create two empty GameObjects as spawn areas
-   - Assign to GameManager's `redSpawnArea` and `blueSpawnArea`
+2. **Configure Spawn Points** (NEW: Multiple spawn points supported!)
+   - Create multiple empty GameObjects as spawn points for each team
+   - Assign arrays to GameManager's `redSpawnPoints[]` and `blueSpawnPoints[]`
    - Position them on opposite sides of the battlefield
+   - Units will randomly spawn at one of the available points
+   - *Legacy: Single spawn area mode still supported via `redSpawnArea` and `blueSpawnArea`*
 
-5. **Create Unit Prefabs**
-   - The UnitSpawner can auto-generate basic cube units
+3. **Create Unit Prefabs**
+   - Use `PrefabFactory` to generate sample prefabs programmatically
    - Or create custom 3D models for better visuals
+   - Assign prefabs to UnitSpawner
 
-6. **Setup UI**
+4. **Setup UI**
    - Create Canvas with UI elements
    - Assign UI references in UIManager
    - Add TextMeshPro components for scores and counters
+
+See `SCENE_SETUP.md` for detailed manual setup instructions.
 
 ### Testing Without TikTok
 
