@@ -1,5 +1,6 @@
 using UnityEngine;
 using NUnit.Framework;
+using System.Collections;
 
 namespace TABSTIK.Testing
 {
@@ -125,7 +126,7 @@ namespace TABSTIK.Testing
             }
         }
         
-        private System.Collections.IEnumerator SpawnUnitsCoroutine(Units.Team team, int count)
+        private IEnumerator SpawnUnitsCoroutine(Units.Team team, int count)
         {
             for (int i = 0; i < count; i++)
             {
